@@ -16,6 +16,10 @@ The paper reported results on the following GPT3 models:
   
   <b>runModelBatch.pl text-davinci-003 100 logfile.out 5</b>
   
+  Note: you need to fill in an openai key, in the program ellipsisBatch.py
+  
+  
+  
   
 
 
