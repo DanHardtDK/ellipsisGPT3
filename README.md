@@ -16,7 +16,9 @@ The paper reported results on the following GPT3 models:
   
   <b>runModelBatch.pl text-davinci-003 100 logfile.out 5</b>
   
-  Note: you need to fill in an openai key, in the program ellipsisBatch.py
+  This specifies 100 Yes and 100 No examples, with output logged to logfile.out, and there are 5 iterations, for a total of 1000 examples.
+
+  Note: to run the above, you need to fill in an openai key, in the program ellipsisBatch.py
   
   
   
