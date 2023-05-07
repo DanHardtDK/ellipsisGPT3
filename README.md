@@ -2,8 +2,7 @@
 Code and data for paper on ellipsis-dependent reasoning:
 Ellipsis Dependent Reasoning: A New Challenge for Large Language Models, to appear at ACL 2023
 
-To produce
-The paper reported results on the following GPT3 models:
+The paper reports results on the following GPT3 models:
 <ul>
   <li>text-davinci-003</li>
   <li>text-davinci-002</li>
