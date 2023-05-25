@@ -1,0 +1,5 @@
+.venv
+__pycache__
+config.cfg
+poetry.lock
+pyproject.toml
