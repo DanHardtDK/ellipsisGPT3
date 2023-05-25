@@ -1,43 +1,32 @@
-import sys
-exampleFileList = sys.argv[1]
-f = open(exampleFileList)
-resultFiles = f.readlines()
-tot=[]
-for fName in resultFiles:
-    fName = fName.strip()
-    rFile = open(fName)
-    results = rFile.readlines()
+import pandas as pd
+from argparse import ArgumentParser
 
-    r=results[1]
-    current=[]
-    vals = r.split()
-    current.append(vals)
+parser = ArgumentParser()
+parser.add_argument("--file", type=str, required=True)
+args = parser.parse_args()
 
-    for r in results[2:]:
-        vals = r.split()
-        current.append(vals)
-
-    tot.append(current)
-
-print("Pattern \t Total VPEcorrect    NoVPEcorrect")
-out = list(zip(*tot))
-avg1tot = avg2tot = cnt = 0
-for o in out:
-    print(o[0][0],end="\t ") #pattern
-    tot=[0,0,0]
-    for vals in o:
-        tot[0] += int(vals[1])
-        tot[1] += int(vals[2])
-        tot[2] += int(vals[3])
-    avg1=tot[1]/tot[0]
-    avg2=tot[2]/tot[0]
-    avg1tot += avg1
-    avg2tot += avg2
-    cnt+=1
-    print(tot[0],tot[1],"(",avg1,"%)",tot[2],"(",avg2,"%)")
-
-
-print(avg1tot/cnt, avg2tot/cnt)
+data = pd.read_csv(args.file, sep=",")
+proc = (
+    data
+    .assign(File=lambda d: d["File"].str.strip(".json"))
+    .groupby(["File"]).agg(
+        {
+            "VPE Correct": "mean",
+            "NO VPE Correct": "mean",
+            "Total": "max",
+        }
+    )
+    .reset_index()
+    .round(2)
+)
+print("ITERATIONS: ", data["Iteration"].max() + 1)
+print("TOTAL EXAMPLES: ", data["Total"].sum())
+print("TOTAL VPE CORRECT: ", data["VPE Correct"].sum())
+print("TOTAL NO VPE CORRECT: ", data["NO VPE Correct"].sum())
+print("TOTAL VPE ACCURACY: ", data["VPE Correct"].sum() / data["Total"].sum())
+print("TOTAL NO VPE ACCURACY: ", data["NO VPE Correct"].sum() / data["Total"].sum())
+print("TOTAL ACCURACY: ", (data["VPE Correct"].sum() + data["NO VPE Correct"].sum()) / (data["Total"].sum() * 2))
+print(proc)
     
         
             
