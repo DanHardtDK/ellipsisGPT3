@@ -1,0 +1,7 @@
+File Total VPE Correct NO VPE Correct
+data/2SentYN.json 5 4 3
+data/1SentYN.json 5 4 2
+data/1SentAfterYN.json 5 1 1
+data/1SentSubordYN.json 5 5 4
+data/1SentSubordBackwardsYN.json 5 3 3
+data/2ActionsYN.json 5 4 2

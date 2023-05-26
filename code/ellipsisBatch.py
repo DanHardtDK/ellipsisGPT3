@@ -4,7 +4,7 @@ import sys
 import random
 import pdb
 
-# sample invocation: python3 ellipsisBatch.py examples1 text-davinci-002 100
+# sample invocation: python3 ellipsisBatch.py examplesYN text-davinci-002 100
 # examples1 containing
 # 2Sent.json
 # 1Sent.json
@@ -46,6 +46,7 @@ print("File","Total", "VPE Correct","NO VPE Correct", file=resFile)
 
 for eFile in exampleFiles:
     eFile = eFile.strip()
+    eFile = "data/" + eFile
     d = open(eFile)
     examples = json.load(d)
     print("len", len(examples))
@@ -54,8 +55,7 @@ for eFile in exampleFiles:
     Instructions = "Please give a Yes or No answer:\n\n"
 
     # need an openai key
-    openai.api_key =""
-
+    openai.api_key ="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"
     def completePrompt(p):
         response = openai.Completion.create(
             model=model,
