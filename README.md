@@ -12,7 +12,7 @@ The paper reports results on the following GPT3 models:
   <li>text-babbage-001</li>
   </ul>
   
-  The following command produces results for the davinci-003 model:
+  The following command produces results for the davinci-003 model as they were reported in the paper:
   
   <b>runModelBatch.pl text-davinci-003 100 logfile.out 5</b>
   
