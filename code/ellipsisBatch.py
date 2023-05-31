@@ -55,7 +55,7 @@ for eFile in exampleFiles:
     Instructions = "Please give a Yes or No answer:\n\n"
 
     # need an openai key
-    openai.api_key ="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"
+    openai.api_key =""
     def completePrompt(p):
         response = openai.Completion.create(
             model=model,
