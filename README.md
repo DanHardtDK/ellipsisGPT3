@@ -1,7 +1,7 @@
 # ellipsisGPT3
 Code and data for paper on ellipsis-dependent reasoning:
 
-<i>Ellipsis Dependent Reasoning: A New Challenge for Large Language Models</i>, by Daniel Hardt, to appear at ACL 2023
+<a href=https://aclanthology.org/2023.acl-short.4.pdf>Ellipsis Dependent Reasoning: A New Challenge for Large Language Models</a>, by Daniel Hardt, to appear at ACL 2023
 
 
 **Note**: to run the above, you need to fill in an OpenAI API key in `config.cfg`.
