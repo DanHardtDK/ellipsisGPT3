@@ -29,7 +29,7 @@ This specifies 100 Yes and 100 No examples, with complete output logged to logfi
 ## Run with Python
 The following command produces the same results as the PERL operation:
 ```bash
-python code/ellipsisBatch.py data/examples1 text-davinci-002 100 5
+python code/ellipsisBatch.py data/examples1 text-davinci-003 100 5
 ```
 Note that the python method does not output the logs (as in logfile.out)
 
