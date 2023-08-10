@@ -18,6 +18,7 @@ The paper reports results on the following GPT3 models:
   <li>text-babbage-001</li>
   </ul>
   
+<<<<<<< HEAD
 ## Run with PERL
 The following command produces results for the davinci-003 model:
 ```bash
@@ -87,6 +88,13 @@ TOTAL ACCURACY:  0.9
 
 **Note**: Using `avgBatch` requires pandas
 
+=======
+  The following command produces results for the davinci-003 model as they were reported in the paper:
+  
+  <b>runModelBatch.pl text-davinci-003 100 logfile.out 5</b>
+  
+  This specifies 100 Yes and 100 No examples, with output logged to logfile.out, and there are 5 iterations, for a total of 1000 examples.
+>>>>>>> origin/main
 
 
 

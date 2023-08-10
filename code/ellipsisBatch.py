@@ -6,7 +6,18 @@ import pdb
 import openai
 from pathlib import Path
 
+<<<<<<< HEAD
 from utils.parsers import ARGS, EXAMPLE_FILES, config_parser
+=======
+# sample invocation: python3 ellipsisBatch.py examplesYN text-davinci-002 100
+# examples1 containing
+# 2Sent.json
+# 1Sent.json
+# 1SentAfter.json
+# 1SentSubord.json
+# 1SentSubordBackwards.json
+# 2Actions.json
+>>>>>>> origin/main
 
 # SET OPENAI API KEY
 openai.api_key = config_parser.get('DEFAULT', 'API_KEY')
@@ -36,6 +47,7 @@ dt_string = datetime.now().strftime("%d%m%Y_%H%M%S")
 runID =  f"{ARGS.exampleFileList.name}_{ARGS.sampleSize}_{ARGS.model}_{dt_string}".lstrip("data/")
 print("Running ", runID)
 
+<<<<<<< HEAD
 # CREATE RESULTS FILE
 resFile = Path("runs") / runID
 resFile.touch(exist_ok=False)
@@ -50,6 +62,31 @@ for iteration in range(ARGS.iterations):
         
         with eFile.open(encoding="UTF-8") as source:
             examples = json.load(source)
+=======
+for eFile in exampleFiles:
+    eFile = eFile.strip()
+    eFile = "data/" + eFile
+    d = open(eFile)
+    examples = json.load(d)
+    print("len", len(examples))
+       
+    examples = random.sample(examples, sampleSize)
+    Instructions = "Please give a Yes or No answer:\n\n"
+
+    # need an openai key
+    openai.api_key =""
+    def completePrompt(p):
+        response = openai.Completion.create(
+            model=model,
+            prompt = Instructions + p + "\n\n",
+            temperature=0.7,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        return(response.choices[0].text)
+>>>>>>> origin/main
 
         print(f"{eFile.name} | {len(examples)} | PICKING {ARGS.sampleSize} EXAMPLES")
         
