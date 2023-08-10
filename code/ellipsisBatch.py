@@ -1,9 +1,14 @@
-import openai
+from datetime import datetime
 import json
 import sys
 import random
-import pdb
+import pdb 
+import openai
+from pathlib import Path
 
+<<<<<<< HEAD
+from utils.parsers import ARGS, EXAMPLE_FILES, config_parser
+=======
 # sample invocation: python3 ellipsisBatch.py examplesYN text-davinci-002 100
 # examples1 containing
 # 2Sent.json
@@ -12,38 +17,52 @@ import pdb
 # 1SentSubord.json
 # 1SentSubordBackwards.json
 # 2Actions.json
+>>>>>>> origin/main
 
-# exampleFileList: files containing ellipsis patterns
-exampleFileList = sys.argv[1]
-if not "json" in exampleFileList:
-    exit
-f = open(exampleFileList)
-exampleFiles = f.readlines()
-if len(exampleFiles) == 0:
-    exit
+# SET OPENAI API KEY
+openai.api_key = config_parser.get('DEFAULT', 'API_KEY')
 
-# GPT3 model
-model = sys.argv[2]
-if model not in ["text-davinci-003","text-davinci-002", "text-ada-001", "text-curie-001", "text-babbage-001"]:
-    exit
 
-    # sample size
-sampleSize = int(sys.argv[3])
-if sampleSize not in [10,50,100, 500]:
-    exit
+def completePrompt(p, model, instruction):
+    response = openai.Completion.create(
+        model=model,
+        prompt = instruction + p + "\n\n",
+        temperature=0.7,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return(response.choices[0].text)
 
-# results File: runID
-from datetime import datetime
-now = datetime.now()
-# dd/mm/YY H:M:S
-dt_string = now.strftime("%d%m%Y_%H%M%S")
-print("date and time =", dt_string)
-runID =  exampleFileList+"_" + str(sampleSize)+"_"+ model+"_" +"_"+dt_string
+def doQuery(p, model, instruction, ans):
+    sysout = completePrompt(p, model, instruction)
+    sysout = sysout.strip()
+    print(p, "System:", sysout)
+    sysout = sysout[:len(ans)]
+    return(sysout == ans)
+
+# results File: runID - # dd/mm/YY H:M:S
+dt_string = datetime.now().strftime("%d%m%Y_%H%M%S")
+runID =  f"{ARGS.exampleFileList.name}_{ARGS.sampleSize}_{ARGS.model}_{dt_string}".lstrip("data/")
 print("Running ", runID)
-resFile = open(runID,"w")
-# Headings
-print("File","Total", "VPE Correct","NO VPE Correct", file=resFile)
 
+<<<<<<< HEAD
+# CREATE RESULTS FILE
+resFile = Path("runs") / runID
+resFile.touch(exist_ok=False)
+resFile.write_text("File,Iteration,Total,VPE Correct,NO VPE Correct\n")
+
+# RUN ITERATIONS
+for iteration in range(ARGS.iterations):
+    print("STARTING ITERATION", iteration, "="*30)
+
+    # RUN THROUGH EXAMPLE FILES
+    for i, eFile in enumerate(EXAMPLE_FILES):
+        
+        with eFile.open(encoding="UTF-8") as source:
+            examples = json.load(source)
+=======
 for eFile in exampleFiles:
     eFile = eFile.strip()
     eFile = "data/" + eFile
@@ -67,46 +86,49 @@ for eFile in exampleFiles:
             presence_penalty=0
         )
         return(response.choices[0].text)
+>>>>>>> origin/main
 
-    def doQuery(p,ans):
-        sysout = completePrompt(p)
-        sysout = sysout.strip()
-        print(p, "System:", sysout)
-        sysout = sysout[:len(ans)]
-        return(sysout == ans)
+        print(f"{eFile.name} | {len(examples)} | PICKING {ARGS.sampleSize} EXAMPLES")
+        
+        examples = random.sample(examples, ARGS.sampleSize)
 
-    cntVPE = cntNOVPE = cntVPECorrect = cntNOVPECorrect = 0
-    for e in examples:
-        print("============================================")
-        prompt = "C: " +  e['V1a'] +  "\n" + "Q: " + e['Q'] + "\n\n"
-        answer = e['A']
-        res = doQuery(prompt,answer)
-        cntVPE = cntVPE + 1
-        if res:
-            VPECorrect = True
-            cntVPECorrect = cntVPECorrect + 1
-        else:
-            VPECorrect = False
+        instructions = "Please give a Yes or No answer:\n\n"
 
-        print("Yes Ellipsis: Res",res, "Correct is", answer) # 
-    
-        prompt = "C: " +  e['V1b'] +  "\n" + "Q: " + e['Q'] + "\n\n" # 
-        answer = e['A']
-        res = doQuery(prompt,answer)
+        cntVPE = cntNOVPE = cntVPECorrect = cntNOVPECorrect = 0
 
+        # RUN THROUGH EXAMPLES
+        for j, e in enumerate(examples):
+            print(f"Iter {iteration} | DATASET {i} | EX {j}", "="*30)
+            prompt = "C: " +  e['V1a'] +  "\n" + "Q: " + e['Q'] + "\n\n"
+            answer = e['A']
+            res = doQuery(prompt, ARGS.model, instructions, answer)
+            cntVPE += 1
+            if res:
+                VPECorrect = True
+                cntVPECorrect += 1
+            else:
+                VPECorrect = False
 
-        cntNOVPE = cntNOVPE + 1
-        if res:
-            NOVPECorrect = True
-            cntNOVPECorrect = cntNOVPECorrect + 1
-        else:
-            NOVPECorrect = False
+            print(f"Yes Ellipsis: Res {res} | Correct is {answer}")
+        
+            prompt = "C: " +  e['V1b'] +  "\n" + "Q: " + e['Q'] + "\n\n" 
+            answer = e['A']
+            res = doQuery(prompt, ARGS.model, instructions, answer)
 
-        print("No Ellipsis: Res",res, "Correct is", answer)         
-    
-       
-    print(eFile,cntVPE, cntVPECorrect,cntNOVPECorrect)
-    print(eFile,cntVPE, cntVPECorrect,cntNOVPECorrect, file=resFile)
+            cntNOVPE += 1
+            if res:
+                NOVPECorrect = True
+                cntNOVPECorrect += 1
+            else:
+                NOVPECorrect = False
+
+            print(f"No Ellipsis: Res {res} | Correct is {answer}")        
+        
+        
+        print(eFile, iteration, cntVPE, cntVPECorrect, cntNOVPECorrect)
+
+        with resFile.open("a") as f:
+            f.write(f"{eFile.name},{iteration},{cntVPE},{cntVPECorrect},{cntNOVPECorrect}\n")
 
 
 

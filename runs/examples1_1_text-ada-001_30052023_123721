@@ -1,0 +1,6 @@
+File,Iteration,Total,VPE Correct,NO VPE Correct
+1SentAfterYN.json,0,1,0,0
+1SentYN.json,0,1,1,1
+2SentYN.json,0,1,1,1
+1SentSubordYN.json,0,1,1,1
+1SentSubordBackwardsYN.json,0,1,0,0
